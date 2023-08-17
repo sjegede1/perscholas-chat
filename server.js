@@ -21,11 +21,18 @@ const Post = require('./models/Post')
 app.use(express.json({ extended: false }));
 
 //===========ROUTES=============
-app.get("/", (req, res) => {
-  res.send("Hello World 🥳"); //🔥
+//INDEX ROUTE
+app.get("/", async (req, res) => {
+    try {
+        const allPosts = await Post.find({})
+        res.send(allPosts)
+    } catch (err) {
+        console.error(err)
+        res.status(500).send('Server Error')
+    }
 });
 
-//Create route [C]RUD
+//CREATE ROUTE [C]RUD
 app.post('/', async (req,res) => {
     try {
         const post = await Post.create(req.body) //req.body does not have _id
@@ -33,7 +40,6 @@ app.post('/', async (req,res) => {
     } catch (err) {
         console.error(err)
     }
-    
 })
 
 const PORT = 3000;
