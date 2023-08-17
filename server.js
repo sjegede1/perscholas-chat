@@ -21,14 +21,14 @@ const Post = require('./models/Post')
 app.use(express.json({ extended: false }));
 
 //===========ROUTES=============
-//INDEX ROUTE
+//INDEX ROUTE C[R]UD
 app.get("/", async (req, res) => {
     try {
         const allPosts = await Post.find({})
         res.send(allPosts)
     } catch (err) {
         console.error(err)
-        res.status(500).send('Server Error')
+        res.status(500).send('Server Error: Read route')
     }
 });
 
@@ -39,6 +39,18 @@ app.post('/', async (req,res) => {
         res.send(post) // This will have _id
     } catch (err) {
         console.error(err)
+        res.status('Server Error: Create Route')
+    }
+})
+
+//UPDATE ROUTE CR[U]D
+app.put('/:id', async (req,res) => {
+    try {
+        const post = await Post.findByIdAndUpdate(req.params.id,req.body,{new: true})
+        res.send(post)
+    } catch (err) {
+        console.error(err)
+        res.status(500).send('Server Error: Update Route')
     }
 })
 
